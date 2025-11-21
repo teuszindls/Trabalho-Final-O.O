@@ -1,4 +1,4 @@
-package entidades;
+package Entidades;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ public abstract class Usuario {
     private int somaAvaliacoes = 0;
     private int totalAvaliacoes = 0;
 
-    public Usuario(String nome, String cpf, String email, String telefone, String senhaHash) {
+    public Usuario(String nome, String cpf, String email, String telefone, String senhaHash, String senhaHash2) {
         
         this.nome = nome;
         this.cpf = cpf;
@@ -25,8 +25,6 @@ public abstract class Usuario {
         this.telefone = telefone;
         this.senhaHash = senhaHash;
     }
-
-    
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getCpf() { return cpf; }
@@ -58,5 +56,8 @@ public abstract class Usuario {
     public String toString() {
         return String.format("nome=%s, cpf=%s, email=%s, telefone=%s, media=%.2f]",
                 nome, cpf, email, telefone, getMediaAvaliacao());
+    }
+    public synchronized boolean autenticar(String senhaHashString) {
+        return Objects.equals(this.senhaHash, senhaHashString);
     }
 }
