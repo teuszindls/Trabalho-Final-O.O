@@ -2,6 +2,7 @@ package Entidades;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import enums.MotoristaStatus;
 
 public class Motorista extends Usuario {
     private String cnhNumero;

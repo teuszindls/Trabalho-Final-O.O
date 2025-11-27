@@ -1,4 +1,4 @@
-package Entidades;
+package enums;
 
 public enum MotoristaStatus {
     ONLINE,
