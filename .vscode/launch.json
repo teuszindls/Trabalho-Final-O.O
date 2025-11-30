@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "SistemaMobilidade",
+            "request": "launch",
+            "mainClass": "Servicos.SistemaMobilidade",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "SistemaMobilidade",
+            "request": "launch",
+            "mainClass": "trabalhofinalOO/Servicos.SistemaMobilidade",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

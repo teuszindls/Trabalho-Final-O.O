@@ -44,4 +44,6 @@ public class Motorista extends Usuario {
         return "Motorista{" + super.toString() + ", cnh=" + cnhNumero + ", validade=" + cnhValidade +
                 ", status=" + status + ", veiculo=" + veiculoAtual + '}';
     }
+     public cadastrar() {
+        System.out.println("Cadastro do motorista realizado com sucesso!");
 }

@@ -31,4 +31,7 @@ public class Passageiro extends Usuario {
     public String toString() {
         return "Passageiro{" + super.toString() + ", metodosPagamento=" + metodosPagamento + '}';
     }
+    public cadastrar() {
+        System.out.println("Cadastro de passageiro realizado com sucesso!");
+    }
 }
