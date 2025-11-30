@@ -5,22 +5,12 @@
 	<projects>
 	</projects>
 	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
-<<<<<<< HEAD
-			<id>1764525810794</id>
-=======
 			<id>1763749769606</id>
->>>>>>> 155055058627e47db61461dd72982be7623d2585
 			<name></name>
 			<type>30</type>
 			<matcher>
