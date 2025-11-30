@@ -1,4 +1,4 @@
-package entidades.pagamento;
+package pagamento;
 
 import entidades.Passageiro;
 import excecoes.PagamentoRecusadoException;

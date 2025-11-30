@@ -1,7 +1,7 @@
 package excecoes;
 
-public class EstadoInvalidoDaCorridaException extends Exception{ 
-	public EstadoInvalidoDaCorridaException(String mensagem) {
-		super(mensagem);
-	}
+public class EstadoInvalidoDaCorridaException extends RuntimeException {
+    public EstadoInvalidoDaCorridaException(String mensagem) {
+        super(mensagem);
+    }
 }
