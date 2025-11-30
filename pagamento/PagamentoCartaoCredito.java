@@ -17,10 +17,15 @@ public class PagamentoCartaoCredito implements MetodoPagamento {
     public void processarPagamento(Passageiro passageiro, double valor) throws PagamentoRecusadoException, SaldoInsuficienteException {
         if (numero == null || numero.length() < 16) {
             throw new PagamentoRecusadoException("Número do cartão inválido.");
+        } else if (validade == null || validade.isEmpty()) {
+            throw new PagamentoRecusadoException("Validade do cartão inválida.");
         }
     }
 
     public String getNumero() {
         return numero;
+    }
+    public String getValidade() {
+        return validade;
     }
 }
