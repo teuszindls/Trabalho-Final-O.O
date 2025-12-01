@@ -27,6 +27,10 @@ public class Passageiro extends Usuario {
     public boolean hasPendenciaFinanceira() { return pendenciaFinanceira; }
     public void setPendenciaFinanceira(boolean pendenciaFinanceira) { this.pendenciaFinanceira = pendenciaFinanceira; }
 
+    public Passageiro saldoPassageiro(){
+        return saldoPassageiro();
+    }
+
     @Override
     public String toString() {
         return "Passageiro{" + super.toString() + ", metodosPagamento=" + metodosPagamento + '}';

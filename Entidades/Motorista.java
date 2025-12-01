@@ -38,12 +38,14 @@ public class Motorista extends Usuario {
         if (cnhValidade == null) return false;
         return !LocalDate.now().isAfter(cnhValidade);
     }
+    public Motorisa saldoMotorista(){
+        return saldoMotorista();
+    }
 
     @Override
     public String toString() {
         return "Motorista{" + super.toString() + ", cnh=" + cnhNumero + ", validade=" + cnhValidade +
                 ", status=" + status + ", veiculo=" + veiculoAtual + '}';
     }
-     public cadastrar() {
-        System.out.println("Cadastro do motorista realizado com sucesso!");
+
 }

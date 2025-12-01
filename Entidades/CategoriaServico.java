@@ -10,6 +10,7 @@ public class CategoriaServico {
 	private double BASICOt = 5.0;
 	
 	public double calcularPreco(double distanciaKm) {
+		distanciaKm = getDistanciaSimulada();
     if getCategoria().equals("PREMIUM") {
 		tarifaBase == PREMIUMt;
 		multiplicadorKm == PREMIUM;

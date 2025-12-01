@@ -32,21 +32,19 @@ public class ServicoCorridas {
 
    
         double distanciaSimulada = new Random().nextDouble() * 20 + 1;
+        getDistanciaSimulada(distanciaSimulada);
   
-        long idCorrida = System.currentTimeMillis(); 
+        long idCorrida =  Math.random()*9999;
         
         Corrida novaCorrida = new Corrida(
             idCorrida,
             origem,
             destino,
-            0.0, 
-            0.0, 
             StatusCorrida.SOLICITADA,
             passageiro,
             categoria,
             distanciaSimulada
         );
-
 
         novaCorrida.aceitar(motoristaEncontrado);
         motoristaEncontrado.setStatus(StatusMotorista.EM_CORRIDA);
