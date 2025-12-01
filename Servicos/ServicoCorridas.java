@@ -11,20 +11,15 @@ import entidades.CategoriaServico;
 import enums.StatusCorrida;
 import enums.StatusMotorista;
 import excecoes.NenhumMotoristaDisponivelException;
+import servicos.SistemaUsuarios;
 
 public class ServicoCorridas {
-
-    private List<Motorista> motoristasCadastrados = new ArrayList<>();
-
-    public void adicionarMotorista(Motorista m) {
-        motoristasCadastrados.add(m);
-    }
 
     public Corrida solicitarCorrida(Passageiro passageiro, String origem, String destino, CategoriaServico categoria) 
             throws NenhumMotoristaDisponivelException {
         
        
-        Motorista motoristaEncontrado = buscarMotoristaDisponivel();
+        Motorista motoristaEncontrado = SistemaUsuarios.motoristaSorteado;
 
         if (motoristaEncontrado == null) {
             throw new NenhumMotoristaDisponivelException("Não há motoristas disponíveis no momento.");
@@ -43,8 +38,7 @@ public class ServicoCorridas {
             StatusCorrida.SOLICITADA,
             passageiro,
             categoria,
-            distanciaSimulada
-        );
+            distanciaSimulada);
 
         novaCorrida.aceitar(motoristaEncontrado);
         motoristaEncontrado.setStatus(StatusMotorista.EM_CORRIDA);
@@ -53,13 +47,26 @@ public class ServicoCorridas {
         
         return novaCorrida;
     }
+    public Corrida aceitarCorrida(Motorista motorista) {
+        Passageiro passageiroEncontrado = SistemaUsuarios.passageiroSorteado;
 
-    private Motorista buscarMotoristaDisponivel() {
-        for (Motorista m : motoristasCadastrados) {
-            if (m.getStatus() == StatusMotorista.ONLINE) {
-                return m; 
-            }
-        }
-        return null; 
+        Corrida novaViagem = new ServicoCorridas().solicitarCorrida(
+            SistemaUsuarios.passageiroSorteado, 
+            "Origem Exemplo", 
+            "Destino Exemplo", 
+            CategoriaServico.BASICO);
+ 
+            novaViagem.aceitar(passageiroEncontrado);
+            System.out.println("Passageiro " + passageiroEncontrado.getNome() + " pediu a corrida!");
+            System.out.println("Dados da corrida:" + 
+                "\nOrigem: " + novaViagem.getOrigem() +
+                "\nDestino: " + novaViagem.getDestino() +
+                "\nDistância: " + novaViagem.getDistanciaSimulada() + " km" +
+                "\nCategoria: " + novaViagem.getCategoria().toString() +
+                "\nValor: " + novaViagem.calcularPreco()
+            );
+
+            return novaViagem;
     }
+
 }

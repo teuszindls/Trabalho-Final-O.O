@@ -91,6 +91,7 @@ public class SistemaMobilidade {
                 getnome(),
                 categoriaEscolhida == 1 ? CategoriaServico.BASICO : CategoriaServico.PREMIUM
             );
+
             System.out.println("Corrida em andamento! ID da corrida: " + corrida.getId());
             delay(Math.random()*20);
             System.out.println("Corrida finalizada! Total a pagar: R$ " + corrida.calcularPreco());
@@ -124,7 +125,6 @@ public class SistemaMobilidade {
         delay(3);
         clearScreen();
         System.out.println("*Sistema de Mobilidade*");
-        try {
             setStatus(StatusMotorista.OFFLINE);
             if(motorista.getVeiculoAtual() == null) {
                 System.out.println("Você não possui um veículo cadastrado. Por favor, cadastre um veículo antes de aceitar corridas.");
@@ -143,24 +143,38 @@ public class SistemaMobilidade {
             } else {
                 System.out.println("Você está offline.");
             }
-            
+            for(i = 0; i<1; i++){
             System.out.println("Aguardando solicitação de corrida...");
-            Corrida corrida = servicoCorridas.aceitarCorrida(motorista);
-            if (corrida != null) {
-                System.out.println("Corrida aceita com sucesso! ID da corrida: " + corrida.getId());
-                motorista.setStatus(StatusMotorista.EM_CORRIDA);
+            delay(3);
+            clearScreen();
+            System.out.println("Você recebeu uma solicitação de corrida!");
+            aceitarCorrida();
+            System.out.println("Deseja aceitar a corrida?");
+            System.out.println("1 - Sim");
+            System.out.println("2 - Não");
+            int aceitar = scanner.nextInt();
+            if(aceitar == 1){
+                return i++;
             } else {
-                System.out.println("Nenhuma corrida disponível no momento.");
+                System.out.println("Corrida recusada. Voltando ao modo de espera.");
+                i--;
             }
-        } catch (UsuarioPendenteException e) {
-            System.out.println(e.getMessage("Usuário com pendência! Resolva antes de aceitar corridas."));
-        }
+            iniciarViagem();
+            System.out.println("Corrida em andamento! ID da corrida: " + corrida.getId());
+            delay(Math.random()*20);
+            System.out.println("Corrida finalizada! Total recebido: R$ " + corrida.calcularPreco());
+            finalizarViagem();
+            System.out.println("Saldo atual do motorista: R$ " + getSaldoMotorista());
+            
+            
+    
         
-
-
-    }
+}
 }
     
-    while (sistema == true); }
+   
 }
+ while (sistema == true); }
+}
+
 
