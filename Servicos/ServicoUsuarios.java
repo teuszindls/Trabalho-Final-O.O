@@ -112,5 +112,6 @@ public class ServicoUsuarios {
            throw new NenhumMotoristaDisponivelException("Motorista não aprovado para dirigir no sistema.");
         }
     }
+    
 }
 

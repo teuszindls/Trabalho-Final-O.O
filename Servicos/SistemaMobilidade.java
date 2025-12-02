@@ -115,9 +115,26 @@ public class SistemaMobilidade {
             } else {
                 System.out.println("Pagamento pendente. Por favor, regularize sua situação financeira.");
                 setSaldoPassageiro(saldoPassageiro() - corrida.calcularPreco());
+            }
                 System.out.println("Saldo atual do passageiro: R$ " + getSaldoPassageiro());
-            } 
-           } catch (NenhumMotoristaDisponivelException e) {
+                
+                for(i = 0; i<1; i++){
+                System.out.println("*Avalie sua experiência com o motorista*");
+                System.out.println("Digite uma nota de 1 a 5 estrelas:");
+                double estrelas = scanner.nextDouble();
+                if(estrelas < 1 || estrelas > 5){
+                    System.out.println("Nota inválida. Por favor, insira uma nota entre 1 e 5.");
+                    i--;
+                } else {
+                    System.out.println("Obrigado por sua avaliação!");
+                    avaliar(estrelas,corrida.getMotorista());
+                    i++;
+                    
+                }
+           } 
+        
+    }
+            catch (NenhumMotoristaDisponivelException e) {
             System.out.println(e.getMessage("Nenhum motorista disponível no momento."));
         }
        } else if(Login == true && motoristaLogado == true){
@@ -173,8 +190,11 @@ public class SistemaMobilidade {
 }
     
    
+        } 
+    while (sistema == true);
 }
- while (sistema == true); }
 }
+
+
 
 
