@@ -1,7 +1,5 @@
 package Entidades;
 
-import java.util.Objects;
-
 public class Veiculo {
     private final String placa;
     private String modelo;
@@ -10,7 +8,7 @@ public class Veiculo {
     private boolean aprovado;
 
     public Veiculo(String placa, String modelo, String cor, int ano, boolean aprovado) {
-        this.placa = Objects.requireNonNull(placa);
+        this.placa = placa;
         this.modelo = modelo;
         this.cor = cor;
         this.ano = ano;
@@ -29,7 +27,6 @@ public class Veiculo {
 
     @Override
     public String toString() {
-        return String.format("Veiculo[placa=%s, modelo=%s, cor=%s, ano=%d, aprovado=%b]",
-                placa, modelo, cor, ano, aprovado);
+        return "Veiculo: " + modelo + " (" + cor + ")";
     }
 }

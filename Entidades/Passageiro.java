@@ -2,40 +2,36 @@ package Entidades;
 
 import java.util.ArrayList;
 import java.util.List;
+import enums.MetodoPagamento;
+import enums.StatusFinanceiro;
 
 public class Passageiro extends Usuario {
-    private final List<String> metodosPagamento = new ArrayList<>();
-    private boolean pendenciaFinanceira = false;
+    private final List<MetodoPagamento> metodosPagamento = new ArrayList<>();
+    private StatusFinanceiro statusFinanceiro = StatusFinanceiro.REGULAR;
+    private double saldo = 1000.0;
 
     public Passageiro(String id, String nome, String cpf, String email, String telefone, String senhaHash) {
         super(id, nome, cpf, email, telefone, senhaHash);
     }
+    
+    public Passageiro() { super(); }
 
-    public synchronized void adicionarMetodoPagamento(String metodo) {
-        if (metodo == null || metodo.isBlank()) throw new IllegalArgumentException("Metodo de pagamento inválido");
+    public void adicionarMetodoPagamento(MetodoPagamento metodo) {
         metodosPagamento.add(metodo);
     }
 
-    public synchronized List<String> getMetodosPagamento() {
-        return List.copyOf(metodosPagamento);
+    public List<MetodoPagamento> getMetodosPagamento() {
+        return metodosPagamento;
     }
 
-    public synchronized boolean possuiMetodoPagamento() {
-        return !metodosPagamento.isEmpty();
-    }
+    public StatusFinanceiro getStatusFinanceiro() { return statusFinanceiro; }
+    public void setStatusFinanceiro(StatusFinanceiro status) { this.statusFinanceiro = status; }
 
-    public boolean hasPendenciaFinanceira() { return pendenciaFinanceira; }
-    public void setPendenciaFinanceira(boolean pendenciaFinanceira) { this.pendenciaFinanceira = pendenciaFinanceira; }
-
-    public Passageiro saldoPassageiro(){
-        return saldoPassageiro();
-    }
+    public double getSaldo() { return saldo; }
+    public void setSaldo(double saldo) { this.saldo = saldo; }
 
     @Override
     public String toString() {
-        return "Passageiro{" + super.toString() + ", metodosPagamento=" + metodosPagamento + '}';
-    }
-    public cadastrar() {
-        System.out.println("Cadastro de passageiro realizado com sucesso!");
+        return "Passageiro: " + nome;
     }
 }

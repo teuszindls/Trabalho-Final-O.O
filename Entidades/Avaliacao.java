@@ -1,22 +1,23 @@
 package Entidades;
 
-
-import java.util.Objects;
-import SistemaUsuarios;
-
 public class Avaliacao {
-    
-    public Avaliacao avaliar();{
-      double estrelas,soma_avaliacoes;
-      int n_corridas;
-      
-      
-      
+    private String autorId;
+    private double estrelas;
+    private String comentario;
+
+    public Avaliacao(String autorId, double estrelas, String comentario) {
+        this.autorId = autorId;
+        this.estrelas = estrelas;
+        this.comentario = comentario;
+    }
+
+    public double getEstrelas() {
+        return estrelas;
     }
 
     @Override
     public String toString() {
-        return String.format("Avaliacao[autor=%s, estrelas=%d, comentario=%s]",
+        return String.format("Avaliacao[autor=%s, estrelas=%.1f, comentario=%s]",
                 autorId, estrelas, comentario);
     }
 }

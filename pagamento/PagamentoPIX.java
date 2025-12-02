@@ -1,10 +1,10 @@
 package pagamento;
 
-import entidades.Passageiro;
+import Entidades.Passageiro;
 import excecoes.PagamentoRecusadoException;
 import excecoes.SaldoInsuficienteException;
 
-public class PagamentoPIX implements MetodoPagamento {
+public class PagamentoPIX implements MetodoPagamento1 {
     private String chavePix;
 
     public PagamentoPIX(String chavePix) {
@@ -13,12 +13,6 @@ public class PagamentoPIX implements MetodoPagamento {
 
     @Override
     public void processarPagamento(Passageiro passageiro, double valor) throws PagamentoRecusadoException, SaldoInsuficienteException {
-        if (chavePix == null || chavePix.isEmpty()) {
-            throw new PagamentoRecusadoException("Chave PIX inválida.");
-        }
-    }
-
-    public String getChavePix() {
-        return chavePix;
+        System.out.println("Pagamento de R$ " + valor + " processado via PIX.");
     }
 }

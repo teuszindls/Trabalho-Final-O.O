@@ -1,10 +1,10 @@
 package pagamento;
 
-import entidades.Passageiro;
+import Entidades.Passageiro;
 import excecoes.PagamentoRecusadoException;
 import excecoes.SaldoInsuficienteException;
 
-public class PagamentoCartaoCredito implements MetodoPagamento {
+public class PagamentoCartaoCredito implements MetodoPagamento1 {
     private String numero;
     private String validade;
 
@@ -16,16 +16,9 @@ public class PagamentoCartaoCredito implements MetodoPagamento {
     @Override
     public void processarPagamento(Passageiro passageiro, double valor) throws PagamentoRecusadoException, SaldoInsuficienteException {
         if (numero == null || numero.length() < 16) {
-            throw new PagamentoRecusadoException("Número do cartão inválido.");
-        } else if (validade == null || validade.isEmpty()) {
-            throw new PagamentoRecusadoException("Validade do cartão inválida.");
         }
+        System.out.println("Pagamento de R$ " + valor + " processado no Cartão de Crédito.");
     }
-
-    public String getNumero() {
-        return numero;
-    }
-    public String getValidade() {
-        return validade;
-    }
+    
+    public String getTipo() { return "Cartão de Crédito"; }
 }

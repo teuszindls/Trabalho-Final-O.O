@@ -1,9 +1,9 @@
 package pagamento;
 
-import entidades.Passageiro;
+import Entidades.Passageiro;
 import excecoes.PagamentoRecusadoException;
 import excecoes.SaldoInsuficienteException;
 
-public interface MetodoPagamento {
+public interface MetodoPagamento1 {
     void processarPagamento(Passageiro passageiro, double valor) throws PagamentoRecusadoException, SaldoInsuficienteException;
 }

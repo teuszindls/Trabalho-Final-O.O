@@ -1,34 +1,35 @@
 package Entidades;
 
 import enums.StatusCorrida;
+import enums.MetodoPagamento;
+import enums.StatusFinanceiro;
 import excecoes.EstadoInvalidoDaCorridaException;
 import excecoes.PagamentoRecusadoException;
 import excecoes.SaldoInsuficienteException;
-import pagamento.MetodoPagamento;
+import pagamento.MetodoPagamento1;
+import pagamento.PagamentoCartaoCredito;
+import pagamento.PagamentoDinheiro;
+import pagamento.PagamentoPIX;
 
 public class Corrida {
     
     private long id;
     private String localPartida;
     private String localDestino;
-    private double precoEstimado;
     private double precoFinal;
     private StatusCorrida status;
     private Passageiro passageiro;
     private Motorista motorista;
     private CategoriaServico categoria;
     private MetodoPagamento metodoPagamentoUtilizado;
+    private StatusFinanceiro statusFinanceiro = StatusFinanceiro.PENDENTE;
     private double distancia;
     
-    public Corrida(long id, String localPartida, String localDestino, double precoEstimado, double precoFinal,
-            StatusCorrida status, Passageiro passageiro, CategoriaServico categoria,
-            double distancia) {
-        super();
+    public Corrida(long id, String localPartida, String localDestino, StatusCorrida status, 
+                   Passageiro passageiro, CategoriaServico categoria, double distancia) {
         this.id = id;
         this.localPartida = localPartida;
         this.localDestino = localDestino;
-        this.precoEstimado = precoEstimado;
-        this.precoFinal = precoFinal;
         this.status = status;
         this.passageiro = passageiro;
         this.categoria = categoria;
@@ -40,84 +41,30 @@ public class Corrida {
         this.motorista = m;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getLocalPartida() {
-        return localPartida;
-    }
-
-    public void setLocalPartida(String localPartida) {
-        this.localPartida = localPartida;
-    }
-
-    public String getLocalDestino() {
-        return localDestino;
-    }
-
-    public void setLocalDestino(String localDestino) {
-        this.localDestino = localDestino;
-    }
-
-    public double getPrecoEstimado() {
-        return precoEstimado;
-    }
-
-    public void setPrecoEstimado(double precoEstimado) {
-        this.precoEstimado = precoEstimado;
-    }
-
-    public double getPrecoFinal() {
-        return precoFinal;
-    }
-
-    public void setPrecoFinal(double precoFinal) {
-        this.precoFinal = precoFinal;
-    }
-
-    public StatusCorrida getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusCorrida status) {
-        this.status = status;
-    }
-
-    public Passageiro getPassageiro() {
-        return passageiro;
-    }
-
-    public void setPassageiro(Passageiro passageiro) {
-        this.passageiro = passageiro;
-    }
-
-    public Motorista getMotorista() {
-        return motorista;
-    }
-
-    public void setMotorista(Motorista motorista) {
-        this.motorista = motorista;
-    }
-
-    public CategoriaServico getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(CategoriaServico categoria) {
-        this.categoria = categoria;
-    }
-
+    public long getId() { return id; }
+    public String getOrigem() { return localPartida; }
+    public String getDestino() { return localDestino; }
+    public double getDistanciaSimulada() { return distancia; }
+    public CategoriaServico getCategoria() { return categoria; }
+    public Motorista getMotorista() { return motorista; }
+    
+    public void setStatus(StatusCorrida status) { this.status = status; }
+    public StatusCorrida getStatus() { return status; }
+    
     public void setMetodoPagamentoUtilizado(MetodoPagamento metodo) {
         this.metodoPagamentoUtilizado = metodo;
     }
+    
+    public void setStatusFinanceiro(StatusFinanceiro status) {
+        this.statusFinanceiro = status;
+    }
+    
+    public StatusFinanceiro getStatusFinanceiro() {
+        return this.statusFinanceiro;
+    }
 
-    public MetodoPagamento getMetodoPagamentoUtilizado() {
-        return this.metodoPagamentoUtilizado;
+    public double calcularPreco() {
+        return categoria.calcularPreco(distancia);
     }
 
     public void iniciarViagem() {
@@ -127,23 +74,23 @@ public class Corrida {
     public void finalizarViagem() throws PagamentoRecusadoException, SaldoInsuficienteException {
         setStatus(StatusCorrida.PENDENTE_PAGAMENTO);
         
-        double valor = categoria.calcularPreco(distancia);
+        double valor = calcularPreco();
         this.precoFinal = valor;
 
         if (this.metodoPagamentoUtilizado == null) {
-            throw new EstadoInvalidoDaCorridaException("Não há método de pagamento selecionado para esta corrida.");
+            this.metodoPagamentoUtilizado = MetodoPagamento.DINHEIRO;
         }
 
-        this.metodoPagamentoUtilizado.processarPagamento(this.passageiro, valor);
+        MetodoPagamento1 processador = null;
+        switch(this.metodoPagamentoUtilizado) {
+            case CARTAO_CREDITO: processador = new PagamentoCartaoCredito("1234123412341234", "12/30"); break;
+            case PIX: processador = new PagamentoPIX("chave-pix-aleatoria"); break;
+            default: processador = new PagamentoDinheiro(); break;
+        }
+
+        processador.processarPagamento(this.passageiro, valor);
             
         setStatus(StatusCorrida.FINALIZADA);
-    }
-    
-    public void cancelar() throws EstadoInvalidoDaCorridaException {
-        if (status == StatusCorrida.EM_ANDAMENTO) {
-            throw new EstadoInvalidoDaCorridaException("Não é possível cancelar uma corrida que já está em andamento.");
-        } else {
-            setStatus(StatusCorrida.CANCELADA);
-        }
+        setStatusFinanceiro(StatusFinanceiro.REGULAR);
     }
 }
