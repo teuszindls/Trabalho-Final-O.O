@@ -1,18 +1,13 @@
 package Entidades;
 
 public class Avaliacao {
-    private String autorId;
-    private double estrelas;
-    private String comentario;
-
-    public Avaliacao(String autorId, double estrelas, String comentario) {
-        this.autorId = autorId;
-        this.estrelas = estrelas;
-        this.comentario = comentario;
-    }
-
-    public double getEstrelas() {
-        return estrelas;
+    
+    public Avaliacao avaliar();{
+      double estrelas,soma_avaliacoes;
+      int n_corridas;
+      
+      
+      
     }
 
     @Override

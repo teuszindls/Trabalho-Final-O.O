@@ -11,10 +11,11 @@ public class Motorista extends Usuario {
     private double saldo = 0.0;
 
     public Motorista(String id, String nome, String cpf, String email, String telefone, String senhaHash,
-                     String cnhNumero, LocalDate cnhValidade) {
+                     String cnhNumero, LocalDate cnhValidade, int corridasRealizadas) {
         super(id, nome, cpf, email, telefone, senhaHash);
         this.cnhNumero = cnhNumero;
         this.cnhValidade = cnhValidade;
+        this.corridasRealizadas = corridasRealizadas;
     }
     
     public Motorista() { super(); }
@@ -23,7 +24,8 @@ public class Motorista extends Usuario {
     public void setCnhNumero(String cnhNumero) { this.cnhNumero = cnhNumero; }
     public LocalDate getCnhValidade() { return cnhValidade; }
     public void setCnhValidade(LocalDate cnhValidade) { this.cnhValidade = cnhValidade; }
-
+public int getCorridasRealizadas(){
+    return corridasRealizadas; }
     public MotoristaStatus getStatus() { return status; }
     public void setStatus(MotoristaStatus status) { this.status = status; }
 
