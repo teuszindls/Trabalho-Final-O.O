@@ -127,7 +127,7 @@ public class SistemaMobilidade {
                     i--;
                 } else {
                     System.out.println("Obrigado por sua avaliação!");
-                    avaliar(estrelas,corrida.getMotorista());
+                    avaliar(estrelas,motorista.getCorridasRealizadas());
                     i++;
                     
                 }
@@ -182,17 +182,27 @@ public class SistemaMobilidade {
             System.out.println("Corrida finalizada! Total recebido: R$ " + corrida.calcularPreco());
             finalizarViagem();
             System.out.println("Saldo atual do motorista: R$ " + getSaldoMotorista());
+            for(i = 0; i<1; i++){
+            System.out.println("*Avalie sua experiência com o passageiro*");
+            System.out.println("Digite uma nota de 1 a 5 estrelas:");
+            double estrelas = scanner.nextDouble();
+            if(estrelas < 1 || estrelas > 5){
+                System.out.println("Nota inválida. Por favor, insira uma nota entre 1 e 5.");
+                i--;
+            } else {
+                System.out.println("Obrigado por sua avaliação!");
+                avaliar(estrelas,passageiro.getCorridasRealizadas());
+                i++;
+            }
+        }
             
-            
-    
-        
+    }
 }
-}
-    
-   
-        } 
-    while (sistema == true);
-}
+} while (sistema == true); 
+
+} 
+
+
 }
 
 
