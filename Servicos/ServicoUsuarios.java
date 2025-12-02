@@ -1,6 +1,5 @@
 package Servicos;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 import Entidades.Motorista;

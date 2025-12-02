@@ -82,88 +82,177 @@ public class SistemaMobilidade {
                         System.out.println("Opção inválida.");
                 }
             } else {
-                System.out.println("Pagamento pendente. Por favor, regularize sua situação financeira.");
-                setSaldoPassageiro(saldoPassageiro() - corrida.calcularPreco());
-            }
-                System.out.println("Saldo atual do passageiro: R$ " + getSaldoPassageiro());
                 
-                for(i = 0; i<1; i++){
-                System.out.println("*Avalie sua experiência com o motorista*");
-                System.out.println("Digite uma nota de 1 a 5 estrelas:");
-                double estrelas = scanner.nextDouble();
-                if(estrelas < 1 || estrelas > 5){
-                    System.out.println("Nota inválida. Por favor, insira uma nota entre 1 e 5.");
-                    i--;
-                } else {
-                    System.out.println("Obrigado por sua avaliação!");
-                    avaliar(estrelas,corrida.getMotorista());
-                    i++;
+                if (isPassageiro) {
+                    System.out.println("\n--- Painel Passageiro: " + passageiroAtual.getNome() + " ---");
+                    System.out.println("Sua Nota Média: " + String.format("%.1f", passageiroAtual.getMediaAvaliacao()) + " estrelas");
+                    System.out.println("1 - Solicitar Corrida");
+                    System.out.println("2 - Ver Saldo");
+                    System.out.println("3 - Logout");
+                    System.out.print("Opção: ");
                     
+                    int opPass = scanner.nextInt();
+                    if (opPass == 1) {
+                        try {
+                            System.out.print("Origem: ");
+                            String origem = scanner.next();
+                            System.out.print("Destino: ");
+                            String destino = scanner.next();
+                            
+                            System.out.println("Categoria: 1-Básico, 2-Premium");
+                            int catOp = scanner.nextInt();
+                            CategoriaServico cat = (catOp == 2) ? CategoriaServico.PREMIUM : CategoriaServico.BASICO;
+                            
+                            System.out.println("Buscando motoristas...");
+                            delay(1);
+                            
+                            Corrida corrida = servicoCorridas.solicitarCorrida(passageiroAtual, origem, destino, cat);
+                            
+                            System.out.println("Motorista encontrado: " + corrida.getMotorista().getNome());
+                            System.out.println("Nota do Motorista: " + String.format("%.1f", corrida.getMotorista().getMediaAvaliacao()));
+                            delay(1);
+                            
+                            corrida.iniciarViagem();
+                            System.out.println("Viagem em andamento...");
+                            delay(2);
+                            
+                            System.out.println("Chegou ao destino! Valor: R$ " + String.format("%.2f", corrida.calcularPreco()));
+                            
+                            if (!passageiroAtual.getMetodosPagamento().isEmpty()) {
+                                System.out.println("Escolha pagamento:");
+                                for(int i=0; i < passageiroAtual.getMetodosPagamento().size(); i++) {
+                                    System.out.println((i+1) + " - " + passageiroAtual.getMetodosPagamento().get(i));
+                                }
+                                int pg = scanner.nextInt();
+                                if (pg > 0 && pg <= passageiroAtual.getMetodosPagamento().size()) {
+                                    MetodoPagamento mp = passageiroAtual.getMetodosPagamento().get(pg-1);
+                                    corrida.setMetodoPagamentoUtilizado(mp);
+                                }
+                            }
+                            
+                            corrida.finalizarViagem();
+                            passageiroAtual.setSaldo(passageiroAtual.getSaldo() - corrida.calcularPreco());
+
+                            System.out.println("\n--------------------------------");
+                            System.out.print("Avalie o motorista (1 a 5): ");
+                            double nota = scanner.nextDouble();
+                            corrida.getMotorista().adicionarAvaliacao(new Avaliacao(passageiroAtual.getNome(), nota, "Boa corrida"));
+                            System.out.println("Obrigado pela avaliação!");
+                            
+                            System.out.println("O motorista está avaliando você...");
+                            delay(1);
+                            double notaRecebida = 4.0 + Math.random();
+                            if (notaRecebida > 5.0) notaRecebida = 5.0;
+                            
+                            passageiroAtual.adicionarAvaliacao(new Avaliacao(corrida.getMotorista().getNome(), notaRecebida, "Passageiro tranquilo"));
+                            System.out.println("O motorista te avaliou com " + String.format("%.1f", notaRecebida) + " estrelas.");
+                            System.out.println("Sua nova média: " + String.format("%.1f", passageiroAtual.getMediaAvaliacao()));
+
+                            
+                        } catch (Exception e) {
+                            System.out.println("Erro na corrida: " + e.getMessage());
+                        }
+                    } else if (opPass == 2) {
+                        System.out.println("Saldo: R$ " + String.format("%.2f", passageiroAtual.getSaldo()));
+                    } else {
+                        usuarioLogado = false;
+                        passageiroAtual = null;
+                    }
+                    
+                } else {
+                    System.out.println("\n--- Painel Motorista: " + motoristaAtual.getNome() + " ---");
+                    System.out.println("Sua Nota Média: " + String.format("%.1f", motoristaAtual.getMediaAvaliacao()) + " estrelas");
+                    System.out.println("Status: " + motoristaAtual.getStatus());
+                    System.out.println("1 - Ficar ONLINE");
+                    System.out.println("2 - Ver Saldo");
+                    System.out.println("3 - Logout");
+                    System.out.print("Opção: ");
+                    
+                    int opMot = scanner.nextInt();
+                    
+                    if (opMot == 1) {
+                        motoristaAtual.setStatus(MotoristaStatus.ONLINE);
+                        System.out.println("Você está ONLINE. Aguardando...");
+                        delay(2);
+                        
+                        System.out.println("\n!!! NOVA SOLICITAÇÃO !!!");
+                        
+                        String nomeSorteado = nomesAleatorios[(int)(Math.random() * nomesAleatorios.length)];
+                        Passageiro pFake = new Passageiro("99", nomeSorteado, "000", "email", "00", "00");
+                        
+                        double notaInicialFake = 3.5 + Math.random() * 1.5; 
+                        if (notaInicialFake > 5.0) notaInicialFake = 5.0;
+                        pFake.adicionarAvaliacao(new Avaliacao("Sistema", notaInicialFake, "Inicial"));
+
+                        double distFake = 5.0 + Math.random() * 15.0; 
+                        CategoriaServico catFake = CategoriaServico.BASICO;
+                        
+                        Corrida corridaOfertada = new Corrida(
+                            System.currentTimeMillis(), "Centro", "Bairro Sul", 
+                            StatusCorrida.SOLICITADA, pFake, catFake, distFake
+                        );
+                        
+                        double valorEstimado = catFake.calcularPreco(distFake);
+                        
+                        System.out.println("Passageiro: " + pFake.getNome() + " (Nota: " + String.format("%.1f", pFake.getMediaAvaliacao()) + ")");
+                        System.out.println("Valor: R$ " + String.format("%.2f", valorEstimado));
+                        System.out.println("1 - ACEITAR | 2 - RECUSAR");
+                        
+                        int decisao = scanner.nextInt();
+                        
+                        if (decisao == 1) {
+                            corridaOfertada.aceitar(motoristaAtual);
+                            motoristaAtual.setStatus(MotoristaStatus.EM_CORRIDA);
+                            System.out.println("Corrida aceita. Em andamento...");
+                            delay(2);
+                            
+                            try {
+                                corridaOfertada.setMetodoPagamentoUtilizado(MetodoPagamento.DINHEIRO);
+                                corridaOfertada.finalizarViagem();
+                                
+                                motoristaAtual.setSaldo(motoristaAtual.getSaldo() + valorEstimado);
+                                motoristaAtual.setStatus(MotoristaStatus.ONLINE);
+                                
+                                System.out.println("Corrida Finalizada. Saldo atualizado.");
+                                
+                                System.out.println("\n--------------------------------");
+                                System.out.print("Avalie o passageiro " + pFake.getNome() + " (1 a 5): ");
+                                double notaDada = scanner.nextDouble();
+                                
+                                pFake.adicionarAvaliacao(new Avaliacao(motoristaAtual.getNome(), notaDada, "Avaliação do motorista"));
+                                
+                                System.out.println("Avaliação enviada!");
+                                System.out.println("Nova média do passageiro: " + String.format("%.1f", pFake.getMediaAvaliacao()));
+                                
+                                System.out.println("--------------------------------");
+                                System.out.println("O passageiro também te avaliou...");
+                                delay(1);
+                                double notaRecebidaMot = 4.0 + Math.random();
+                                if (notaRecebidaMot > 5.0) notaRecebidaMot = 5.0;
+                                
+                                motoristaAtual.adicionarAvaliacao(new Avaliacao(pFake.getNome(), notaRecebidaMot, "Motorista rapido"));
+                                System.out.println("Você recebeu " + String.format("%.1f", notaRecebidaMot) + " estrelas.");
+                                System.out.println("Sua nova média: " + String.format("%.1f", motoristaAtual.getMediaAvaliacao()));
+                                
+                            } catch (Exception e) {
+                                System.out.println("Erro: " + e.getMessage());
+                            }
+                            
+                        } else {
+                            System.out.println("Recusada.");
+                        }
+                        
+                    } else if (opMot == 2) {
+                        System.out.println("Saldo: R$ " + String.format("%.2f", motoristaAtual.getSaldo()));
+                    } else {
+                        motoristaAtual.setStatus(MotoristaStatus.OFFLINE);
+                        usuarioLogado = false;
+                        motoristaAtual = null;
+                    }
                 }
-           } 
-        
-    }
-            catch (NenhumMotoristaDisponivelException e) {
-            System.out.println(e.getMessage("Nenhum motorista disponível no momento."));
+            }
         }
-       } else if(Login == true && motoristaLogado == true){
-        System.out.println("Sistema de Mobilidade - Motorista Logado");
-        delay(3);
-        clearScreen();
-        System.out.println("*Sistema de Mobilidade*");
-            setStatus(StatusMotorista.OFFLINE);
-            if(motorista.getVeiculoAtual() == null) {
-                System.out.println("Você não possui um veículo cadastrado. Por favor, cadastre um veículo antes de aceitar corridas.");
-                return;
-            }else if(!motorista.isCnhValida()) {
-                System.out.println("Sua CNH está vencida ou inválida. Atualize suas informações para continuar.");
-                return;
-            }else
-            System.out.println("Deseja ficar online?");
-            System.out.println("1 - Sim");
-            System.out.println("2 - Não");
-            int opcaoOnline = scanner.nextInt();
-            if (opcaoOnline == 1) {
-                System.out.println("Você está agora online e disponível para aceitar corridas.");
-                setStatus(StatusMotorista.ONLINE);
-            } else {
-                System.out.println("Você está offline.");
-            }
-            for(i = 0; i<1; i++){
-            System.out.println("Aguardando solicitação de corrida...");
-            delay(3);
-            clearScreen();
-            System.out.println("Você recebeu uma solicitação de corrida!");
-            aceitarCorrida();
-            System.out.println("Deseja aceitar a corrida?");
-            System.out.println("1 - Sim");
-            System.out.println("2 - Não");
-            int aceitar = scanner.nextInt();
-            if(aceitar == 1){
-                return i++;
-            } else {
-                System.out.println("Corrida recusada. Voltando ao modo de espera.");
-                i--;
-            }
-            iniciarViagem();
-            System.out.println("Corrida em andamento! ID da corrida: " + corrida.getId());
-            delay(Math.random()*20);
-            System.out.println("Corrida finalizada! Total recebido: R$ " + corrida.calcularPreco());
-            finalizarViagem();
-            System.out.println("Saldo atual do motorista: R$ " + getSaldoMotorista());
-            
-            
-    
-        
+        System.out.println("Sistema encerrado.");
+        scanner.close();
+    }
 }
-}
-    
-   
-        } 
-    while (sistema == true);
-}
-}
-
-
-
-
